@@ -18,8 +18,7 @@ export const metadata: Metadata = {
 }
 
 // The Gamma page URL for French content
-// Update this to your actual Gamma page URL
-const GAMMA_URL_FR = 'https://gamma.app/docs/LeaseMint-Deck-FR'
+const GAMMA_URL_FR = 'https://gamma.app/docs/La-combinaison-de-lIA-Fintech-pour-la-location-a-long-terme-9amazwqstxc4qdv'
 
 export default function VCFrenchPage() {
   return <AccessForm lang="fr" redirectUrl={GAMMA_URL_FR} />
