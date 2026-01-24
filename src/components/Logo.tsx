@@ -23,9 +23,11 @@ export default function Logo({ width = 160, height = 48, className = '' }: LogoP
   const { theme } = useTheme()
   
   // Select logo based on current theme
+  // leasemint_black.png = black background version (for dark theme)
+  // leasemint_white.png = white/light version (for light theme)
   const logoSrc = theme === 'dark' 
-    ? '/images/leasemint_white.png' 
-    : '/images/leasemint_black.png'
+    ? '/images/leasemint_black.png' 
+    : '/images/leasemint_white.png'
 
   return (
     <Image
