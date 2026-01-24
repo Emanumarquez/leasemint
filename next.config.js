@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['images.unsplash.com'],
+    // No remote domains needed - using local images only
+    unoptimized: false,
   },
 }
 
