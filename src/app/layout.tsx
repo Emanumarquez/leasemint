@@ -1,16 +1,12 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Leasemint | Venture Capital',
-  description: 'Empowering visionary founders building the future of technology. We invest in early-stage startups transforming industries.',
-  keywords: ['venture capital', 'startup funding', 'tech investment', 'seed funding', 'series A'],
-  openGraph: {
-    title: 'Leasemint | Venture Capital',
-    description: 'Empowering visionary founders building the future of technology.',
-    type: 'website',
+  title: 'LeaseMint',
+  description: 'Secure investor access portal',
+  robots: {
+    index: false, // Prevent search engine indexing
+    follow: false,
   },
 }
 
@@ -21,11 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
