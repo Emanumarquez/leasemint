@@ -1,53 +1,40 @@
+'use client'
+
 import Image from 'next/image'
+import { useTheme } from './ThemeProvider'
 
 /**
  * Logo Component
  * 
- * Displays the LeaseMint logo with support for dark and light variants.
+ * Displays the LeaseMint logo.
+ * Automatically switches between dark and light variants based on theme.
  * 
- * Props:
- * - variant: 'dark' | 'light' - Which logo version to display
- *   - 'dark': Dark logo for light backgrounds (default)
- *   - 'light': Light logo for dark backgrounds
- * - className: Additional CSS classes
- * 
- * Image files expected in /public/images/:
- * - logo-dark.png (or .svg) - For light backgrounds
- * - logo-light.png (or .svg) - For dark backgrounds
+ * - Dark theme: uses leasemint_white.png (white logo on dark bg)
+ * - Light theme: uses leasemint_black.png (black logo on light bg)
  */
 
 interface LogoProps {
-  variant?: 'dark' | 'light'
+  width?: number
+  height?: number
   className?: string
 }
 
-export default function Logo({ variant = 'dark', className = '' }: LogoProps) {
-  const logoSrc = variant === 'dark' 
-    ? '/images/leasemint_black.png' 
-    : '/images/leasemint_white.png'
+export default function Logo({ width = 160, height = 48, className = '' }: LogoProps) {
+  const { theme } = useTheme()
+  
+  // Select logo based on current theme
+  const logoSrc = theme === 'dark' 
+    ? '/images/leasemint_white.png' 
+    : '/images/leasemint_black.png'
 
   return (
     <Image
       src={logoSrc}
       alt="LeaseMint"
-      width={160}
-      height={48}
+      width={width}
+      height={height}
       className={className}
       priority
     />
-  )
-}
-
-/**
- * LogoFallback Component
- * 
- * Text-based fallback when logo images are not available.
- * Use this during development or as a fallback.
- */
-export function LogoFallback({ className = '' }: { className?: string }) {
-  return (
-    <div className={`text-2xl font-semibold tracking-tight ${className}`}>
-      LeaseMint
-    </div>
   )
 }

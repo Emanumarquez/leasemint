@@ -1,30 +1,22 @@
+'use client'
+
 import Link from 'next/link'
-import Image from 'next/image'
+import Logo from '@/components/Logo'
 
 /**
  * Homepage - Language Selection
  * 
  * Presents a clean, centered layout with two language options.
  * Redirects to password-protected VC pages.
- * 
- * Logo images:
- * - /public/images/logo-dark.png - Used on this page (light background)
+ * Logo automatically adapts to current theme.
  */
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      {/* Logo / Brand */}
+      {/* Logo / Brand - auto-switches based on theme */}
       <div className="mb-12 text-center">
-        {/* Logo image - white version for dark background */}
-        <Image
-          src="/images/leasemint_white.png"
-          alt="LeaseMint"
-          width={200}
-          height={60}
-          className="mx-auto"
-          priority
-        />
-        <p className="mt-6 text-brand-400 text-lg">
+        <Logo width={200} height={60} className="mx-auto" />
+        <p className="mt-6 text-adaptive-secondary text-lg">
           Investor Portal
         </p>
       </div>
@@ -46,7 +38,7 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <p className="mt-16 text-sm text-brand-400">
+      <p className="mt-16 text-sm text-adaptive-secondary opacity-60">
         © {new Date().getFullYear()} LeaseMint
       </p>
     </main>

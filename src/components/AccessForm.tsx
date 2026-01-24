@@ -1,19 +1,18 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import Image from 'next/image'
+import Logo from './Logo'
 
 /**
  * AccessForm Component
  * 
  * Password-protected access form for VC content.
  * Handles password validation via server-side API.
+ * Logo automatically adapts to current theme.
  * 
  * Props:
  * - lang: 'fr' | 'en' - Language for UI text
  * - redirectUrl: The Gamma page URL to redirect to on success
- * 
- * Uses dark theme with white logo variant
  */
 
 interface AccessFormProps {
@@ -96,24 +95,17 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      {/* Logo - white version for dark background */}
+      {/* Logo - auto-switches based on theme */}
       <div className="mb-10">
-        <Image
-          src="/images/leasemint_white.png"
-          alt="LeaseMint"
-          width={160}
-          height={48}
-          className="mx-auto"
-          priority
-        />
+        <Logo width={160} height={48} className="mx-auto" />
       </div>
 
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold text-white tracking-tight">
+        <h1 className="text-2xl font-semibold text-adaptive-primary tracking-tight">
           {t.title}
         </h1>
-        <p className="mt-2 text-brand-400">
+        <p className="mt-2 text-adaptive-secondary">
           {t.subtitle}
         </p>
       </div>
@@ -136,7 +128,7 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
 
         {/* Error message */}
         {error && (
-          <p className="text-sm text-red-400 text-center">
+          <p className="text-sm text-red-500 text-center">
             {error}
           </p>
         )}
@@ -158,14 +150,14 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
             e.preventDefault()
             window.location.href = getObfuscatedMailto()
           }}
-          className="text-sm text-brand-400 hover:text-primary-400 underline underline-offset-4 transition-colors"
+          className="text-sm text-adaptive-secondary hover:text-primary-500 underline underline-offset-4 transition-colors"
         >
           {t.requestAccess}
         </a>
       </div>
 
       {/* Footer */}
-      <p className="mt-16 text-sm text-brand-500">
+      <p className="mt-16 text-sm text-adaptive-secondary opacity-60">
         © {new Date().getFullYear()} LeaseMint
       </p>
     </main>
