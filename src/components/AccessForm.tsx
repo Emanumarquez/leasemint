@@ -2,22 +2,22 @@
 
 import { useState, FormEvent } from 'react'
 import Logo from './Logo'
+import SlideViewer from './SlideViewer'
 
 /**
  * AccessForm Component
  * 
  * Password-protected access form for VC content.
- * Handles password validation via server-side API.
- * Logo automatically adapts to current theme.
+ * Shows slide presentation after successful authentication.
  * 
  * Props:
  * - lang: 'fr' | 'en' - Language for UI text
- * - redirectUrl: The Gamma page URL to redirect to on success
+ * - slides: Array of slide image URLs to display after auth
  */
 
 interface AccessFormProps {
   lang: 'fr' | 'en'
-  redirectUrl: string
+  slides: string[]
 }
 
 // Translations for the form
@@ -30,6 +30,7 @@ const translations = {
     error: 'Accès refusé',
     requestAccess: 'Demander un accès',
     loading: 'Vérification...',
+    backToHome: 'Retour',
   },
   en: {
     title: 'Investor Access',
@@ -39,6 +40,7 @@ const translations = {
     error: 'Access denied',
     requestAccess: 'Request access',
     loading: 'Verifying...',
+    backToHome: 'Back',
   },
 }
 
@@ -55,10 +57,11 @@ function getObfuscatedMailto(): string {
   return `mailto:${email}?subject=${subject}`
 }
 
-export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
+export default function AccessForm({ lang, slides }: AccessFormProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const t = translations[lang]
 
@@ -79,8 +82,8 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
       const data = await response.json()
 
       if (data.success) {
-        // Redirect to the Gamma page on success
-        window.location.href = redirectUrl
+        // Show the presentation
+        setIsAuthenticated(true)
       } else {
         // Show generic error message
         setError(t.error)
@@ -93,6 +96,37 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
     }
   }
 
+  // Show presentation after authentication
+  if (isAuthenticated) {
+    return (
+      <main className="min-h-screen flex flex-col px-4 py-8">
+        {/* Header */}
+        <div className="max-w-6xl mx-auto w-full mb-6">
+          <div className="flex items-center justify-between">
+            <Logo width={120} height={36} />
+            <a
+              href="/"
+              className="text-sm text-adaptive-secondary hover:text-primary-500 transition-colors"
+            >
+              ← {t.backToHome}
+            </a>
+          </div>
+        </div>
+
+        {/* Slide Viewer */}
+        <div className="max-w-6xl mx-auto w-full flex-1">
+          <SlideViewer slides={slides} lang={lang} />
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-adaptive-secondary opacity-60 mt-8">
+          © {new Date().getFullYear()} LeaseMint
+        </p>
+      </main>
+    )
+  }
+
+  // Show login form
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       {/* Logo - auto-switches based on theme */}

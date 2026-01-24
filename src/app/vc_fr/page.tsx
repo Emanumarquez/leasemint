@@ -1,11 +1,13 @@
 import AccessForm from '@/components/AccessForm'
 import type { Metadata } from 'next'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * French VC Access Page
  * 
- * Password-protected page that redirects to French Gamma content.
- * The actual redirect URL should be the Gamma page for French content.
+ * Password-protected page that displays French presentation slides.
+ * Slides are loaded from /public/slides/fr/
  */
 
 export const metadata: Metadata = {
@@ -17,9 +19,25 @@ export const metadata: Metadata = {
   },
 }
 
-// The Gamma page URL for French content
-const GAMMA_URL_FR = 'https://gamma.app/docs/La-combinaison-de-lIA-Fintech-pour-la-location-a-long-terme-9amazwqstxc4qdv'
+// Get slides from the fr folder
+function getSlides(): string[] {
+  const slidesDir = path.join(process.cwd(), 'public', 'slides', 'fr')
+  
+  try {
+    const files = fs.readdirSync(slidesDir)
+    const slideFiles = files
+      .filter(file => /\.(png|jpg|jpeg|webp)$/i.test(file))
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+      .map(file => `/slides/fr/${file}`)
+    
+    return slideFiles
+  } catch {
+    return []
+  }
+}
 
 export default function VCFrenchPage() {
-  return <AccessForm lang="fr" redirectUrl={GAMMA_URL_FR} />
+  const slides = getSlides()
+  
+  return <AccessForm lang="fr" slides={slides} />
 }
