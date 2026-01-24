@@ -100,7 +100,7 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
       {/* Logo */}
       <div className="mb-8">
         <Image
-          src="/images/logo-dark.png"
+          src="/images/leasemint_black.png"
           alt="LeaseMint"
           width={140}
           height={42}

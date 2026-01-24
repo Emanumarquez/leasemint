@@ -23,8 +23,8 @@ interface LogoProps {
 
 export default function Logo({ variant = 'dark', className = '' }: LogoProps) {
   const logoSrc = variant === 'dark' 
-    ? '/images/logo-dark.png' 
-    : '/images/logo-light.png'
+    ? '/images/leasemint_black.png' 
+    : '/images/leasemint_white.png'
 
   return (
     <Image

@@ -17,7 +17,7 @@ export default function HomePage() {
       <div className="mb-12 text-center">
         {/* Logo image - uses dark variant for light background */}
         <Image
-          src="/images/logo-dark.png"
+          src="/images/leasemint_black.png"
           alt="LeaseMint"
           width={180}
           height={54}

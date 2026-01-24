@@ -4,6 +4,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'LeaseMint',
   description: 'Secure investor access portal',
+  icons: {
+    icon: '/images/fav.png',
+  },
   robots: {
     index: false, // Prevent search engine indexing
     follow: false,
