@@ -13,8 +13,7 @@ import Image from 'next/image'
  * - lang: 'fr' | 'en' - Language for UI text
  * - redirectUrl: The Gamma page URL to redirect to on success
  * 
- * Logo images:
- * - /public/images/logo-dark.png - Used on this page (light background)
+ * Uses dark theme with white logo variant
  */
 
 interface AccessFormProps {
@@ -97,13 +96,13 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      {/* Logo */}
-      <div className="mb-8">
+      {/* Logo - white version for dark background */}
+      <div className="mb-10">
         <Image
-          src="/images/leasemint_black.png"
+          src="/images/leasemint_white.png"
           alt="LeaseMint"
-          width={140}
-          height={42}
+          width={160}
+          height={48}
           className="mx-auto"
           priority
         />
@@ -111,10 +110,10 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
 
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="text-2xl font-semibold text-brand-900 tracking-tight">
+        <h1 className="text-2xl font-semibold text-white tracking-tight">
           {t.title}
         </h1>
-        <p className="mt-2 text-brand-500">
+        <p className="mt-2 text-brand-400">
           {t.subtitle}
         </p>
       </div>
@@ -137,7 +136,7 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
 
         {/* Error message */}
         {error && (
-          <p className="text-sm text-red-600 text-center">
+          <p className="text-sm text-red-400 text-center">
             {error}
           </p>
         )}
@@ -159,14 +158,14 @@ export default function AccessForm({ lang, redirectUrl }: AccessFormProps) {
             e.preventDefault()
             window.location.href = getObfuscatedMailto()
           }}
-          className="text-sm text-brand-500 hover:text-brand-700 underline underline-offset-4 transition-colors"
+          className="text-sm text-brand-400 hover:text-primary-400 underline underline-offset-4 transition-colors"
         >
           {t.requestAccess}
         </a>
       </div>
 
       {/* Footer */}
-      <p className="mt-16 text-sm text-brand-400">
+      <p className="mt-16 text-sm text-brand-500">
         © {new Date().getFullYear()} LeaseMint
       </p>
     </main>

@@ -9,28 +9,29 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   
+  /* Dark theme - matches LeaseMint branding */
   body {
-    @apply bg-white text-brand-900 antialiased;
+    @apply bg-brand-950 text-white antialiased;
   }
 
   ::selection {
-    @apply bg-brand-200 text-brand-900;
+    @apply bg-primary-500/30 text-white;
   }
 }
 
 @layer components {
-  /* Primary action button */
+  /* Primary action button - green accent */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-brand-900 rounded-lg transition-all duration-200 hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-brand-950 bg-primary-500 rounded-lg transition-all duration-200 hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-brand-950;
   }
 
   /* Secondary/outline button */
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-brand-900 bg-white border border-brand-300 rounded-lg transition-all duration-200 hover:bg-brand-50 hover:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-brand-900 border border-brand-700 rounded-lg transition-all duration-200 hover:bg-brand-800 hover:border-brand-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-brand-950;
   }
 
-  /* Form input */
+  /* Form input - dark theme */
   .input-field {
-    @apply w-full px-4 py-3 text-base text-brand-900 bg-white border border-brand-300 rounded-lg transition-all duration-200 placeholder:text-brand-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+    @apply w-full px-4 py-3 text-base text-white bg-brand-900 border border-brand-700 rounded-lg transition-all duration-200 placeholder:text-brand-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20;
   }
 }

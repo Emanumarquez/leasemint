@@ -15,16 +15,16 @@ export default function HomePage() {
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       {/* Logo / Brand */}
       <div className="mb-12 text-center">
-        {/* Logo image - uses dark variant for light background */}
+        {/* Logo image - white version for dark background */}
         <Image
-          src="/images/leasemint_black.png"
+          src="/images/leasemint_white.png"
           alt="LeaseMint"
-          width={180}
-          height={54}
+          width={200}
+          height={60}
           className="mx-auto"
           priority
         />
-        <p className="mt-4 text-brand-500">
+        <p className="mt-6 text-brand-400 text-lg">
           Investor Portal
         </p>
       </div>
