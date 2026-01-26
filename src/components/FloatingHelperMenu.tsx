@@ -68,15 +68,12 @@ function getContactMailto(lang: 'fr' | 'en'): string {
   return `mailto:${email}?subject=${subject}`
 }
 
-const MENU_SEEN_KEY = 'vc_menu_seen'
-
 export default function FloatingHelperMenu() {
   const { isAuthenticated, lang, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isFAQOpen, setIsFAQOpen] = useState(false)
-  const [hasBeenSeen, setHasBeenSeen] = useState(true) // Start true to avoid flash
-  const [showBounce, setShowBounce] = useState(false)
+  const [showLabel, setShowLabel] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Current language fallback to 'en'
@@ -112,39 +109,34 @@ export default function FloatingHelperMenu() {
     setIsVisible(isAuthenticated)
   }, [isAuthenticated])
 
-  // Auto-open menu on first visit and trigger animations
+  // Animate "Menu" label in and out to catch attention
   useEffect(() => {
-    if (isVisible) {
-      try {
-        const seen = sessionStorage.getItem(MENU_SEEN_KEY)
-        if (!seen) {
-          // First time: open menu after a short delay
-          setHasBeenSeen(false)
-          const openTimer = setTimeout(() => {
-            setIsOpen(true)
-            sessionStorage.setItem(MENU_SEEN_KEY, 'true')
-          }, 800)
-          
-          // Auto-close after showing the menu
-          const closeTimer = setTimeout(() => {
-            setIsOpen(false)
-            setShowBounce(true)
-            // Stop bounce after animation completes
-            setTimeout(() => setShowBounce(false), 3000)
-          }, 4000)
-          
-          return () => {
-            clearTimeout(openTimer)
-            clearTimeout(closeTimer)
-          }
-        } else {
-          setHasBeenSeen(true)
-        }
-      } catch {
-        setHasBeenSeen(true)
+    if (isVisible && !isOpen) {
+      // Start label animation after a short delay
+      const startDelay = setTimeout(() => {
+        setShowLabel(true)
+      }, 1000)
+
+      // Set up recurring animation
+      const interval = setInterval(() => {
+        setShowLabel(true)
+        setTimeout(() => setShowLabel(false), 2500)
+      }, 6000)
+
+      // Hide label after first show
+      const hideFirst = setTimeout(() => {
+        setShowLabel(false)
+      }, 3500)
+
+      return () => {
+        clearTimeout(startDelay)
+        clearTimeout(hideFirst)
+        clearInterval(interval)
       }
+    } else {
+      setShowLabel(false)
     }
-  }, [isVisible])
+  }, [isVisible, isOpen])
 
   // Don't render if not authenticated
   if (!isVisible) {
@@ -313,44 +305,54 @@ export default function FloatingHelperMenu() {
         </div>
       )}
 
-      {/* Floating Action Button */}
-      <button
-        onClick={() => {
-          setIsOpen(!isOpen)
-          setHasBeenSeen(true)
-          setShowBounce(false)
-        }}
-        className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
-          isOpen
-            ? 'bg-brand-600 dark:bg-brand-700 rotate-45'
-            : 'bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-400'
-        } ${!isOpen && !hasBeenSeen ? 'floating-btn-ring' : ''} ${showBounce ? 'floating-btn-bounce' : ''}`}
-        aria-label={t.menu}
-        aria-expanded={isOpen}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-white dark:text-brand-950"
+      {/* Floating Action Button with Label */}
+      <div className="flex items-center gap-3">
+        {/* Animated Menu Label */}
+        <div
+          className={`px-4 py-2 bg-primary-500 text-white dark:text-brand-950 rounded-full shadow-lg font-medium text-sm whitespace-nowrap transition-all duration-500 ${
+            showLabel
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 translate-x-4 pointer-events-none'
+          }`}
         >
-          {isOpen ? (
-            <path d="M18 6 6 18M6 6l12 12" />
-          ) : (
-            <>
-              <circle cx="12" cy="12" r="1" />
-              <circle cx="19" cy="12" r="1" />
-              <circle cx="5" cy="12" r="1" />
-            </>
-          )}
-        </svg>
-      </button>
+          {t.menu} →
+        </div>
+
+        {/* Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
+            isOpen
+              ? 'bg-brand-600 dark:bg-brand-700 rotate-45'
+              : 'bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-400'
+          } ${!isOpen && showLabel ? 'floating-btn-ring' : ''}`}
+          aria-label={t.menu}
+          aria-expanded={isOpen}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-white dark:text-brand-950"
+          >
+            {isOpen ? (
+              <path d="M18 6 6 18M6 6l12 12" />
+            ) : (
+              <>
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="19" cy="12" r="1" />
+                <circle cx="5" cy="12" r="1" />
+              </>
+            )}
+          </svg>
+        </button>
+      </div>
 
       {/* FAQ Panel */}
       <FAQHelper
