@@ -22,6 +22,7 @@ const translations = {
     menu: 'Menu',
     downloadPdf: 'Telecharger le PDF',
     viewPresentation: 'Voir la presentation',
+    kycMvp: 'Acceder au MVP KYC',
     contact: 'Nous contacter',
     faq: 'Questions frequentes',
     switchLang: 'Switch to English',
@@ -32,6 +33,7 @@ const translations = {
     menu: 'Menu',
     downloadPdf: 'Download PDF',
     viewPresentation: 'View Presentation',
+    kycMvp: 'Access KYC MVP',
     contact: 'Contact Us',
     faq: 'Frequently Asked Questions',
     switchLang: 'Passer en francais',
@@ -39,6 +41,9 @@ const translations = {
     close: 'Close',
   },
 }
+
+// KYC MVP URL
+const KYC_MVP_URL = 'https://www.leasemint.net/kyc'
 
 // External presentation URLs
 const PRESENTATION_URLS = {
@@ -194,6 +199,23 @@ export default function FloatingHelperMenu() {
               </svg>
               <span>{t.viewPresentation}</span>
             </button>
+
+            {/* KYC MVP */}
+            <a
+              href={KYC_MVP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full px-4 py-3 flex items-center gap-3 text-left text-brand-700 dark:text-brand-200 hover:bg-brand-50 dark:hover:bg-brand-800 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-500">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <span>{t.kycMvp}</span>
+            </a>
 
             <div className="h-px bg-brand-200 dark:bg-brand-700 my-2" />
 
