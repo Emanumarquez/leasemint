@@ -77,4 +77,55 @@
   .text-adaptive-secondary {
     color: var(--text-secondary);
   }
+
+  /* Floating button attention animation */
+  .floating-btn-pulse {
+    animation: floating-pulse 2s ease-in-out infinite;
+  }
+
+  .floating-btn-bounce {
+    animation: floating-bounce 1s ease-in-out 3;
+  }
+
+  .floating-btn-ring {
+    animation: floating-ring 2.5s ease-out infinite;
+  }
+
+  @keyframes floating-pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+      transform: scale(1.08);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  @keyframes floating-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(-8px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+    75% {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes floating-ring {
+    0% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+  }
 }

@@ -68,11 +68,15 @@ function getContactMailto(lang: 'fr' | 'en'): string {
   return `mailto:${email}?subject=${subject}`
 }
 
+const MENU_SEEN_KEY = 'vc_menu_seen'
+
 export default function FloatingHelperMenu() {
   const { isAuthenticated, lang, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isFAQOpen, setIsFAQOpen] = useState(false)
+  const [hasBeenSeen, setHasBeenSeen] = useState(true) // Start true to avoid flash
+  const [showBounce, setShowBounce] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Current language fallback to 'en'
@@ -107,6 +111,40 @@ export default function FloatingHelperMenu() {
   useEffect(() => {
     setIsVisible(isAuthenticated)
   }, [isAuthenticated])
+
+  // Auto-open menu on first visit and trigger animations
+  useEffect(() => {
+    if (isVisible) {
+      try {
+        const seen = sessionStorage.getItem(MENU_SEEN_KEY)
+        if (!seen) {
+          // First time: open menu after a short delay
+          setHasBeenSeen(false)
+          const openTimer = setTimeout(() => {
+            setIsOpen(true)
+            sessionStorage.setItem(MENU_SEEN_KEY, 'true')
+          }, 800)
+          
+          // Auto-close after showing the menu
+          const closeTimer = setTimeout(() => {
+            setIsOpen(false)
+            setShowBounce(true)
+            // Stop bounce after animation completes
+            setTimeout(() => setShowBounce(false), 3000)
+          }, 4000)
+          
+          return () => {
+            clearTimeout(openTimer)
+            clearTimeout(closeTimer)
+          }
+        } else {
+          setHasBeenSeen(true)
+        }
+      } catch {
+        setHasBeenSeen(true)
+      }
+    }
+  }, [isVisible])
 
   // Don't render if not authenticated
   if (!isVisible) {
@@ -277,12 +315,16 @@ export default function FloatingHelperMenu() {
 
       {/* Floating Action Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen)
+          setHasBeenSeen(true)
+          setShowBounce(false)
+        }}
         className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${
           isOpen
             ? 'bg-brand-600 dark:bg-brand-700 rotate-45'
             : 'bg-primary-500 hover:bg-primary-600 dark:hover:bg-primary-400'
-        }`}
+        } ${!isOpen && !hasBeenSeen ? 'floating-btn-ring' : ''} ${showBounce ? 'floating-btn-bounce' : ''}`}
         aria-label={t.menu}
         aria-expanded={isOpen}
       >
