@@ -1,12 +1,15 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import Logo from '@/components/Logo'
+import { useAuth } from '@/components/AuthContext'
+import EmbeddedPresentation from '@/components/EmbeddedPresentation'
 
 /**
  * English VC Access Page
  * 
- * Password-protected page that redirects to English Gamma site.
+ * Password-protected page that shows the embedded presentation.
+ * The floating menu provides access to PDF download and other options.
  */
 
 const GAMMA_URL_EN = 'https://copy-of-la-combinaison-d-o9ch4g0.gamma.site/'
@@ -19,6 +22,9 @@ const translations = {
   error: 'Access denied',
   requestAccess: 'Request access',
   loading: 'Verifying...',
+  // Authenticated state translations
+  presentationTitle: 'Investor Presentation',
+  backToHome: 'Back to Home',
 }
 
 function getObfuscatedMailto(): string {
@@ -33,8 +39,17 @@ export default function VCEnglishPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showContent, setShowContent] = useState(false)
+  const { isAuthenticated, lang, login } = useAuth()
 
   const t = translations
+
+  // Check if already authenticated for English
+  useEffect(() => {
+    if (isAuthenticated && lang === 'en') {
+      setShowContent(true)
+    }
+  }, [isAuthenticated, lang])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -51,7 +66,9 @@ export default function VCEnglishPage() {
       const data = await response.json()
 
       if (data.success) {
-        window.location.href = GAMMA_URL_EN
+        // Set auth state and show content
+        login('en')
+        setShowContent(true)
       } else {
         setError(t.error)
         setPassword('')
@@ -63,6 +80,40 @@ export default function VCEnglishPage() {
     }
   }
 
+  // Show authenticated content with embedded presentation
+  if (showContent) {
+    return (
+      <main className="min-h-screen flex flex-col">
+        {/* Header */}
+        <header className="flex items-center justify-between px-6 py-4 border-b border-brand-200 dark:border-brand-800">
+          <Logo width={120} height={36} />
+          <div className="flex items-center gap-4">
+            <h1 className="text-lg font-medium text-adaptive-primary hidden sm:block">
+              {t.presentationTitle}
+            </h1>
+            <a
+              href="/"
+              className="text-sm text-adaptive-secondary hover:text-primary-500 transition-colors"
+            >
+              ← {t.backToHome}
+            </a>
+          </div>
+        </header>
+
+        {/* Embedded Presentation */}
+        <div className="flex-1 p-4 md:p-6">
+          <EmbeddedPresentation url={GAMMA_URL_EN} lang="en" />
+        </div>
+
+        {/* Footer */}
+        <footer className="text-center py-4 text-sm text-adaptive-secondary opacity-60">
+          © {new Date().getFullYear()} LeaseMint
+        </footer>
+      </main>
+    )
+  }
+
+  // Show login form
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="mb-10">

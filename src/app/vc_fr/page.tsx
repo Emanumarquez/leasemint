@@ -1,31 +1,37 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import Logo from '@/components/Logo'
+import { useAuth } from '@/components/AuthContext'
+import EmbeddedPresentation from '@/components/EmbeddedPresentation'
 
 /**
  * French VC Access Page
  * 
- * Password-protected page that redirects to French Gamma site.
+ * Password-protected page that shows the embedded presentation.
+ * The floating menu provides access to PDF download and other options.
  */
 
 const GAMMA_URL_FR = 'https://la-combinaison-de-lia-fi-3vmsjte.gamma.site/'
 
 const translations = {
-  title: 'Accès Investisseurs',
-  subtitle: 'Cette page est protégée',
+  title: 'Acces Investisseurs',
+  subtitle: 'Cette page est protegee',
   placeholder: 'Mot de passe',
-  button: 'Accéder',
-  error: 'Accès refusé',
-  requestAccess: 'Demander un accès',
-  loading: 'Vérification...',
+  button: 'Acceder',
+  error: 'Acces refuse',
+  requestAccess: 'Demander un acces',
+  loading: 'Verification...',
+  // Authenticated state translations
+  presentationTitle: 'Presentation Investisseurs',
+  backToHome: 'Retour a l\'accueil',
 }
 
 function getObfuscatedMailto(): string {
   const user = ['m', 'a', 'n', 'u'].join('')
   const domain = ['leasemint', 'ai'].join('.')
   const email = `${user}@${domain}`
-  const subject = encodeURIComponent('LeaseMint – VC Access Request')
+  const subject = encodeURIComponent('LeaseMint – Demande d\'acces VC')
   return `mailto:${email}?subject=${subject}`
 }
 
@@ -33,8 +39,17 @@ export default function VCFrenchPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showContent, setShowContent] = useState(false)
+  const { isAuthenticated, lang, login } = useAuth()
 
   const t = translations
+
+  // Check if already authenticated for French
+  useEffect(() => {
+    if (isAuthenticated && lang === 'fr') {
+      setShowContent(true)
+    }
+  }, [isAuthenticated, lang])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -51,7 +66,9 @@ export default function VCFrenchPage() {
       const data = await response.json()
 
       if (data.success) {
-        window.location.href = GAMMA_URL_FR
+        // Set auth state and show content
+        login('fr')
+        setShowContent(true)
       } else {
         setError(t.error)
         setPassword('')
@@ -63,6 +80,40 @@ export default function VCFrenchPage() {
     }
   }
 
+  // Show authenticated content with embedded presentation
+  if (showContent) {
+    return (
+      <main className="min-h-screen flex flex-col">
+        {/* Header */}
+        <header className="flex items-center justify-between px-6 py-4 border-b border-brand-200 dark:border-brand-800">
+          <Logo width={120} height={36} />
+          <div className="flex items-center gap-4">
+            <h1 className="text-lg font-medium text-adaptive-primary hidden sm:block">
+              {t.presentationTitle}
+            </h1>
+            <a
+              href="/"
+              className="text-sm text-adaptive-secondary hover:text-primary-500 transition-colors"
+            >
+              ← {t.backToHome}
+            </a>
+          </div>
+        </header>
+
+        {/* Embedded Presentation */}
+        <div className="flex-1 p-4 md:p-6">
+          <EmbeddedPresentation url={GAMMA_URL_FR} lang="fr" />
+        </div>
+
+        {/* Footer */}
+        <footer className="text-center py-4 text-sm text-adaptive-secondary opacity-60">
+          © {new Date().getFullYear()} LeaseMint
+        </footer>
+      </main>
+    )
+  }
+
+  // Show login form
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="mb-10">

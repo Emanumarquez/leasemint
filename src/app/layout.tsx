@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { AuthProvider } from '@/components/AuthContext'
 import ThemeToggle from '@/components/ThemeToggle'
+import FloatingHelperMenu from '@/components/FloatingHelperMenu'
 
 export const metadata: Metadata = {
   title: 'LeaseMint',
@@ -24,8 +26,11 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <ThemeToggle />
-          {children}
+          <AuthProvider>
+            <ThemeToggle />
+            <FloatingHelperMenu />
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
