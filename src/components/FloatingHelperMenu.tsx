@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from './AuthContext'
+import FAQHelper from './FAQHelper'
 
 /**
  * FloatingHelperMenu Component
@@ -10,7 +11,8 @@ import { useAuth } from './AuthContext'
  * Provides quick access to:
  * - Download PDF presentation
  * - View presentation (external link)
- * - Contact/Help options
+ * - FAQ / Help center
+ * - Contact options
  * 
  * Translations are automatic based on the selected language.
  */
@@ -20,8 +22,8 @@ const translations = {
     menu: 'Menu',
     downloadPdf: 'Telecharger le PDF',
     viewPresentation: 'Voir la presentation',
-    contact: 'Contacter',
-    help: 'Aide',
+    contact: 'Nous contacter',
+    faq: 'Questions frequentes',
     switchLang: 'Switch to English',
     logout: 'Deconnexion',
     close: 'Fermer',
@@ -31,7 +33,7 @@ const translations = {
     downloadPdf: 'Download PDF',
     viewPresentation: 'View Presentation',
     contact: 'Contact Us',
-    help: 'Help',
+    faq: 'Frequently Asked Questions',
     switchLang: 'Passer en francais',
     logout: 'Logout',
     close: 'Close',
@@ -65,6 +67,7 @@ export default function FloatingHelperMenu() {
   const { isAuthenticated, lang, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isFAQOpen, setIsFAQOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Current language fallback to 'en'
@@ -125,6 +128,11 @@ export default function FloatingHelperMenu() {
   const handleContact = () => {
     window.location.href = getContactMailto(currentLang)
     setIsOpen(false)
+  }
+
+  const handleOpenFAQ = () => {
+    setIsOpen(false)
+    setIsFAQOpen(true)
   }
 
   const handleSwitchLang = () => {
@@ -188,6 +196,19 @@ export default function FloatingHelperMenu() {
             </button>
 
             <div className="h-px bg-brand-200 dark:bg-brand-700 my-2" />
+
+            {/* FAQ */}
+            <button
+              onClick={handleOpenFAQ}
+              className="w-full px-4 py-3 flex items-center gap-3 text-left text-brand-700 dark:text-brand-200 hover:bg-brand-50 dark:hover:bg-brand-800 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-500">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <path d="M12 17h.01" />
+              </svg>
+              <span>{t.faq}</span>
+            </button>
 
             {/* Contact */}
             <button
@@ -266,6 +287,13 @@ export default function FloatingHelperMenu() {
           )}
         </svg>
       </button>
+
+      {/* FAQ Panel */}
+      <FAQHelper
+        isOpen={isFAQOpen}
+        onClose={() => setIsFAQOpen(false)}
+        lang={currentLang}
+      />
     </div>
   )
 }
