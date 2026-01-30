@@ -12,7 +12,7 @@ import EmbeddedPresentation from '@/components/EmbeddedPresentation'
  * The floating menu provides access to PDF download and other options.
  */
 
-const GAMMA_URL_EN = 'https://copy-of-la-combinaison-d-o9ch4g0.gamma.site/'
+const GAMMA_URL_EN = 'https://weben-leasemintshortdeck-lkvilkd.gamma.site/'
 
 const translations = {
   title: 'Investor Access',
