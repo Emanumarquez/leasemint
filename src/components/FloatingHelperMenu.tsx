@@ -47,7 +47,7 @@ const KYC_MVP_URL = 'https://www.leasemint.net/kyc'
 
 // External presentation URLs
 const PRESENTATION_URLS = {
-  fr: 'https://la-combinaison-de-lia-fi-3vmsjte.gamma.site/',
+  fr: 'https://webfr-leasemintshortdeck-vf3sb1x.gamma.site/',
   en: 'https://weben-leasemintshortdeck-lkvilkd.gamma.site/',
 }
 
